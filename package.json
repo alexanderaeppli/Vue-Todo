@@ -1,0 +1,30 @@
+{
+  "name": "vue-todo",
+  "version": "1.0.0",
+  "description": "A simpel todo Webapp made to learn Vue.",
+  "main": "app.js",
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "devDependencies": {
+    "laravel-mix": "^6.0.6",
+    "postcss": "^8.2.2",
+    "resolve-url-loader": "^3.1.0",
+    "sass": "^1.32.0",
+    "sass-loader": "^8.0.2"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderaeppli/Vue-Todo.git"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "author": "Alexander Aeppli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexanderaeppli/Vue-Todo/issues"
+  },
+  "homepage": "https://github.com/alexanderaeppli/Vue-Todo#readme"
+}
