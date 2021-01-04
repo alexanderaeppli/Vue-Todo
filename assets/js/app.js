@@ -3,7 +3,6 @@ const Vue = require('vue/dist/vue.esm-bundler.js')
 const app = Vue.createApp({
     data() {
         return {
-            title: 'Todo List',
             newTodo: '',
             todos: ['Wash clouths'],
         }
@@ -22,7 +21,7 @@ const app = Vue.createApp({
                 this.todos.splice(index, 1)
             }
         }
-    }
+    },
 })
 
 app.mount('#app');
