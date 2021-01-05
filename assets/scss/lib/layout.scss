@@ -1,3 +1,9 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
 #app {
     width: 100%;
     max-width: 600px;
@@ -18,9 +24,32 @@
 .todo-list {
     list-style: none;
     padding: unset;
+    display: flex;
+    flex-direction: column;
 }
 
 .todo-item {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 15px;
+    flex-grow: 0;
 }
+
+.list-enter-active,
+.list-leave-active {
+  transition: opacity .3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-move {
+    transition: transform 0.8s ease;
+}
+
+
+
+  

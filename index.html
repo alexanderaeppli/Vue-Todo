@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue Todo List by Alexander Aeppli</title>
     <link rel="stylesheet" href="app.css" type="text/css">
 </head>
+
 <body>
     <div id="app">
         <form class="todo-form" @submit.prevent="addTodo">
-            <input class="todo-form__field" type="text" name="" v-model="newTodo" id="">
+            <input class="todo-form__field" type="text" name="" v-model="newTodoField" id="">
         </form>
-        <ul class="todo-list" v-for="(todo, index) in todos" :key="index">
-            <li class="todo-item">
-                {{ todo }}
+        <transition-group tag="ul" name="list" class="todo-list">
+            <li class="todo-item" v-for="(todo, index) in todos" :key="todo.key">
+                <span>{{  }}</span>
+                {{ todo.content }}
                 <button @click="removeTodo(index)">Remove</button>
             </li>
-        </ul>
+        </transition-group>
+        <button @click="shuffle">Shuffle</button>
+        <transition-group tag="ul" name="list" class="todo-list">
+            <li class="todo-item" v-for="(todo, index) in todos" :key="todo.key">
+                <span>{{  }}</span>
+                {{ todo.content }}
+                <button @click="removeTodo(index)">Remove</button>
+            </li>
+        </transition-group>
     </div>
     <script src="app.js"></script>
 </body>
+
 </html>
