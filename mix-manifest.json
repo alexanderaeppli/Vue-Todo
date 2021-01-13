@@ -1,6 +1,4 @@
 {
     "/app.js": "/app.js",
-    "/css/app.css": "/css/app.css",
-    "/app.min.css": "/app.min.css",
-    "/app.min.js": "/app.min.js"
+    "/app.css": "/app.css"
 }
