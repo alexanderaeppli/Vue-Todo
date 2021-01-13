@@ -1,14 +1,6 @@
 <template>
   <div>
-    <form class="todo-form" @submit.prevent="addTodo">
-      <input
-        class="todo-form__field"
-        type="text"
-        name=""
-        v-model="newTodoField"
-        id=""
-      />
-    </form>
+    <todo-form @submit.prevent="addTodo(newTodoField)"></todo-form>
     <transition-group tag="ul" name="list" class="todo-list">
       <li
         class="todo-item unselectable"
@@ -30,10 +22,12 @@
 </template>
 
 <script>
+import TodoForm from './components/TodoField.vue';
+
 export default {
+  components: { TodoForm },
   data() {
     return {
-      newTodoField: '',
       todos: [],
       todoKey: 0,
       draggingItem: false,
@@ -51,12 +45,12 @@ export default {
 
       return newTodo;
     },
-    addTodo() {
+    addTodo(name) {
       if (this.newTodoField.length < 0) {
         alert('You cant add empty entries');
         return;
       }
-      let newTodo = this.createTodo(this.newTodoField);
+      let newTodo = this.createTodo(name);
       this.todos.push(newTodo);
       this.newTodoField = '';
     },
@@ -101,17 +95,6 @@ export default {
   width: 100%;
   max-width: 600px;
   margin: 60px auto 0;
-}
-
-.todo-form {
-  width: 100%;
-
-  &__field {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px rgb(206, 206, 206) solid;
-    padding: 10px 15px;
-  }
 }
 
 .todo-list {
