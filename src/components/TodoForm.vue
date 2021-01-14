@@ -7,11 +7,15 @@
       v-model="newTodoField"
       id=""
     />
+    <date-picker></date-picker>
   </form>
 </template>
 
 <script>
+import DatePicker from './DatePicker.vue';
+
 export default {
+  components: { DatePicker },
   data() {
     return {
       newTodoField: '',

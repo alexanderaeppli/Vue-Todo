@@ -1,9 +1,14 @@
 <template>
-    <todo-form @todo-sent="addTodo"></todo-form>
-    <transition-group tag="ul" name="list" class="todo-list">
-      <todo-item v-for="(todo, index) in todos" :todo="todo" :key="todo.key" @remove-todo="removeTodo"></todo-item>
-    </transition-group>
-    <button @click="shuffle">Shuffle</button>
+  <todo-form @todo-sent="addTodo"></todo-form>
+  <transition-group tag="ul" name="list" class="todo-list">
+    <todo-item
+      v-for="(todo, index) in todos"
+      :todo="todo"
+      :key="todo.key"
+      @remove-todo="removeTodo(index)"
+    ></todo-item>
+  </transition-group>
+  <button @click="shuffle">Shuffle</button>
 </template>
 
 <script>
@@ -26,9 +31,6 @@ export default {
       if (this.todos.length >= 0) {
         this.todos.splice(index, 1);
       }
-    },
-    shuffle() {
-      console.log(this.todos);
     },
   },
   computed: {

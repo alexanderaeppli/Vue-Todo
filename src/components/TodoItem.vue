@@ -1,7 +1,7 @@
 <template>
       <li class="todo-item" :class="{ dragged: todo.isdragged }" >
         {{ todo.content }}
-        <button @click="removeTodo(index)">Remove</button>
+        <button @click="$emit('removeTodo')">Remove</button>
       </li>
 </template>
 
@@ -10,8 +10,9 @@ export default {
   props: {
     todo: Object
   },
-  emits: {
-    removeTodo: null,
+  emits: ['removeTodo'],
+  methods: {
+
   }
 };
 </script>
@@ -26,32 +27,32 @@ export default {
   position: relative;
 }
 
-.dragged {
-  opacity: 0.3;
-}
+// .dragged {
+//   opacity: 0.3;
+// }
 
-.unselectable {
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+// .unselectable {
+//   -webkit-user-select: none;
+//   -webkit-touch-callout: none;
+//   -moz-user-select: none;
+//   -ms-user-select: none;
+//   user-select: none;
+// }
 
-.drop-zone-top,
-.drop-zone-bottom {
-  position: absolute;
-  height: 50%;
-  width: 100%;
-  left: 0;
-}
+// .drop-zone-top,
+// .drop-zone-bottom {
+//   position: absolute;
+//   height: 50%;
+//   width: 100%;
+//   left: 0;
+// }
 
 
-.drop-zone-top {
-  top: 0;
-}
+// .drop-zone-top {
+//   top: 0;
+// }
 
-.drop-zone-bottom {
-  bottom: 0;
-}
+// .drop-zone-bottom {
+//   bottom: 0;
+// }
 </style>
