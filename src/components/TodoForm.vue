@@ -1,5 +1,5 @@
 <template>
-  <form class="todo-form">
+  <form @submit.prevent="sendTodo(newTodoField)" class="todo-form">
     <input
       class="todo-form__field"
       type="text"
@@ -15,9 +15,30 @@ export default {
   data() {
     return {
       newTodoField: '',
+      todoKey: 0,
     };
   },
-
+  emits: ['todoSent'],
+  methods: {
+    sendTodo() {
+      if (this.newTodoField.length === 0) {
+        alert('You cant add empty entries');
+        return false;
+      }
+      this.$emit('todoSent', this.todo);
+      this.newTodoField = '';
+      this.todoKey++;
+    },
+  },
+  computed: {
+    todo() {
+      return {
+        content: this.newTodoField,
+        key: this.todoKey,
+        isdragged: false,
+      };
+    },
+  },
 };
 </script>
 

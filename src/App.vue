@@ -1,76 +1,31 @@
 <template>
-  <div>
-    <todo-form @submit.prevent="addTodo(newTodoField)"></todo-form>
+    <todo-form @todo-sent="addTodo"></todo-form>
     <transition-group tag="ul" name="list" class="todo-list">
-      <li
-        class="todo-item unselectable"
-        :class="{ dragged: todo.isdragged }"
-        v-for="(todo, index) in todos"
-        :key="todo.key"
-        @mousedown="grabItem(todo.key)"
-        @mouseover="hoverItem(todo.key, index)"
-      >
-        <!-- <div class="drop-zone-top"></div> -->
-        <!-- <span>{{  }}</span> -->
-        {{ todo.content }}
-        <button @click="removeItem(index)">Remove</button>
-        <!-- <div class="drop-zone-bottom" @mouseover="hoverTodo(todo.key, index)"></div> -->
-      </li>
+      <todo-item v-for="(todo, index) in todos" :todo="todo" :key="todo.key" @remove-todo="removeTodo"></todo-item>
     </transition-group>
     <button @click="shuffle">Shuffle</button>
-  </div>
 </template>
 
 <script>
-import TodoForm from './components/TodoField.vue';
+import TodoForm from './components/TodoForm.vue';
+import TodoItem from './components/TodoItem';
 
 export default {
-  components: { TodoForm },
+  components: { TodoForm, TodoItem },
   data() {
     return {
       todos: [],
-      todoKey: 0,
       draggingItem: false,
     };
   },
   methods: {
-    createTodo(content) {
-      let newTodo = {
-        content: content,
-        key: this.todoKey,
-        isdragged: false,
-      };
-
-      this.todoKey++;
-
-      return newTodo;
+    addTodo(todo) {
+      this.todos.push(todo);
     },
-    addTodo(name) {
-      if (this.newTodoField.length < 0) {
-        alert('You cant add empty entries');
-        return;
-      }
-      let newTodo = this.createTodo(name);
-      this.todos.push(newTodo);
-      this.newTodoField = '';
-    },
-    removeItem(index) {
+    removeTodo(index) {
       if (this.todos.length >= 0) {
         this.todos.splice(index, 1);
       }
-    },
-    grabItem(index) {
-      this.todos[index].isdragged = true;
-      this.draggingItem = true;
-    },
-    hoverItem() {
-      if (this.draggedItem) {
-        console.log('hover');
-        // this.todos.splice(index, 0, this.transferTodo)
-      }
-    },
-    dropItem() {
-      this.todos.this.draggingItem.isdragged === false;
     },
     shuffle() {
       console.log(this.todos);
@@ -102,43 +57,6 @@ export default {
   padding: unset;
   display: flex;
   flex-direction: column;
-}
-
-.todo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 10px 15px;
-  flex-grow: 0;
-  position: relative;
-}
-
-.dragged {
-  opacity: 0.3;
-}
-
-.drop-zone-top,
-.drop-zone-bottom {
-  position: absolute;
-  height: 50%;
-  width: 100%;
-  left: 0;
-}
-
-.unselectable {
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.drop-zone-top {
-  top: 0;
-}
-
-.drop-zone-bottom {
-  bottom: 0;
 }
 
 .list-enter-active,
