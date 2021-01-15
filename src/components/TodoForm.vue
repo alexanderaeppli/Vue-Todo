@@ -7,15 +7,15 @@
       v-model="newTodoField"
       id=""
     />
-    <date-picker></date-picker>
+    <calendar-date-picker></calendar-date-picker>
   </form>
 </template>
 
 <script>
-import DatePicker from './DatePicker.vue';
+import CalendarDatePicker from './CalendarDatePicker.vue';
 
 export default {
-  components: { DatePicker },
+  components: { CalendarDatePicker },
   data() {
     return {
       newTodoField: '',
