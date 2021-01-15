@@ -1,10 +1,8 @@
 <template>
   <fieldset>
     <select name="day" id="" v-model="selectedDay">
-      <option :key="i" :value="i">
-        <div>
+      <option v-for="(days, i) in month" :key="i" :value="i">
           {{ i }}
-        </div>
       </option>
     </select>
     <select name="month" id="" v-model="selectedMonth">
@@ -57,10 +55,21 @@ export default {
       let days = [];
       for (let i = 0; i < numberOfDays; i++) {
         let date = new Date(this.selectedYear, this.selectedMonth + 1, i + 1) ;
+
+        // Test if first day of month is a montay
+        if(date.getDay() !== 1 && i === 0) {
+          console.log(date.getDay());
+        }
+
+        // Test if last day of month is a sunday
+        if(date.getDay() !== 0 && i === numberOfDays - 1) {
+          console.log(date.getDay());
+        }
+
         days[i] = date;
       }
       return days;
-    },
+    }
   },
 };
 </script>
