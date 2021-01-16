@@ -1,17 +1,5 @@
 <template>
   <fieldset>
-    <div class="calendar">
-      <div
-        class="calendar__date--title"
-        v-for="(dayString, index) in dayStrings"
-        :key="index"
-      >
-        {{ dayString }}
-      </div>
-      <div class="calendar__date" v-for="day in month" :key="day">
-        {{ day.getDate() }}
-      </div>
-    </div>
     <select name="month" id="" v-model="selectedMonth">
       <option v-for="(month, index) in months" :key="month" :value="index">
         {{ month }}
@@ -27,6 +15,18 @@
       </option>
     </select>
   </fieldset>
+  <div class="calendar">
+    <div
+      class="calendar__date--title"
+      v-for="(dayString, index) in dayStrings"
+      :key="index"
+    >
+      {{ dayString }}
+    </div>
+    <div class="calendar__date" v-for="day in month" :key="day">
+      {{ day.getDate() }}
+    </div>
+  </div>
 </template>
 
 <script>
@@ -65,10 +65,9 @@ export default {
       startDate.setDate(dateOffset); // add offset to startDate
       let startDateString = startDate.valueOf(); // Make startDate immutable by converting it into a string
 
-      for (let i = 0; i < 35; i++) { // Calendar has 35 fields
+      for (let i = 0; i < 35; i++) {
         let newStartDate = new Date(startDateString);
         let date = new Date(newStartDate.setDate(newStartDate.getDate() + i));
-
         days[i] = date;
       }
 
@@ -89,7 +88,9 @@ export default {
   align-items: center;
 
   &__date {
-    //width: 14.285714286%;
+    user-select: none;
+    height: 1em;
+    width: 1em;
   }
 }
 </style>
