@@ -1,8 +1,8 @@
 <template>
   <fieldset>
     <select name="day" id="" v-model="selectedDay">
-      <option v-for="(days, i) in month" :key="i" :value="i">
-          {{ i }}
+      <option v-for="(day, i) in month" :key="i" :value="i">
+        {{ day }}
       </option>
     </select>
     <select name="month" id="" v-model="selectedMonth">
@@ -43,33 +43,28 @@ export default {
       startingYear: 2010,
       numberOfYears: 20,
       selectedDay: 1,
-      selectedMonth: 1,
+      selectedMonth: 3,
       selectedYear: 2021,
     };
   },
   methods: {},
   computed: {
     month() {
-      let d = new Date(this.selectedYear, this.selectedMonth + 1, 0);
-      let numberOfDays = d.getDate(); 
       let days = [];
-      for (let i = 0; i < numberOfDays; i++) {
-        let date = new Date(this.selectedYear, this.selectedMonth + 1, i + 1) ;
-
-        // Test if first day of month is a montay
-        if(date.getDay() !== 1 && i === 0) {
-          console.log(date.getDay());
-        }
-
-        // Test if last day of month is a sunday
-        if(date.getDay() !== 0 && i === numberOfDays - 1) {
-          console.log(date.getDay());
-        }
+      let startDate = new Date(this.selectedYear, this.selectedMonth, 1);
+      let offsetArray = [6, 0, 1, 2, 3, 4, 5];
+      let dateOffset = startDate.getDate() - offsetArray[startDate.getDay()];
+      startDate.setDate(dateOffset);
+      let startDateString = Date.parse(startDate);
+      for (let i = 0; i < 35; i++) {
+        let newStartDate = new Date(startDateString);
+        let date = new Date(newStartDate.setDate(newStartDate.getDate() + i));
 
         days[i] = date;
       }
+
       return days;
-    }
+    },
   },
 };
 </script>
