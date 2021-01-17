@@ -1,8 +1,8 @@
 <template>
   <div class="datepicker">
     <div class="datepicker__header">
-      <dropdown :items="months" :selectedItemIndex="selectedMonth" ></dropdown>
-      <dropdown :items="years" :selectedItemIndex="selectedYear"></dropdown>
+      <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
+      <dropdown :items="years" :selectedItemIndex="this.years.indexOf(this.selectedYear)"></dropdown>
     </div>
     <div class="calendar">
       <div class="calendar__inner">
@@ -71,6 +71,9 @@ export default {
       date.setSeconds(0);
       date.setMilliseconds(0);
     },
+    setMonth(index) {
+      this.selectedMonth = index;
+    }
   },
   computed: {
     daysOfMonth() {
@@ -97,16 +100,16 @@ export default {
     },
     years() {
       let years = [];
-      for(let i = 0; i < this.numberOfYears; i++) {
-        years[i] = this.startingYear + ( i - 1);
+      for (let i = 0; i < this.numberOfYears; i++) {
+        years[i] = this.startingYear + (i - 1);
       }
       return years;
     },
   },
   mounted() {
     this.selectedMonth = this.today.getMonth();
-    this.selectedYear = this.today.getYear();
-  }
+    this.selectedYear = this.today.getFullYear();
+  },
 };
 </script>
 
@@ -119,11 +122,15 @@ export default {
   max-width: 300px;
   font-family: 'Rubik', sans-serif;
   border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 
   &__header,
   &__footer {
     padding: 15px;
+  }
+
+  &__header {
+    display: flex;
   }
 
   &__footer {
@@ -145,7 +152,7 @@ export default {
     font-weight: 600;
     width: 100%;
 
-    &::before {
+    &::after {
       content: '';
       position: absolute;
       width: 100%;
@@ -164,7 +171,7 @@ export default {
         $lightness: 20%
       );
 
-      &::before {
+      &::after {
         background-color: color.scale(var.$color_primary, $lightness: 20%);
       }
     }
