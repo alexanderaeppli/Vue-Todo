@@ -29,21 +29,20 @@ export default {
   },
   methods: {
     toggleDropdown(event1) {
-      let toggleDropdown = true;
-
-      function eventListener() {}
+      let component = this;
 
       if (!this.listVisible) {
-        window.addEventListener('click', this.eventListener(event));
+        this.listVisible = true;
+
+        document.addEventListener('click', function eventListenerFunction(event) {
+          if (!event1.target.contains(event.target)) {
+            component.listVisible = false;
+            //document.removeEventListener('click', eventListenerFunction());
+            console.log('click');
+          }
+        }, false);
       } else {
-        window.removeEventListener('click', this.eventListener(event));
-      }
-      console.log(toggleDropdown);
-      this.listVisible = toggleDropdown;
-    },
-    eventListenerFunction() {
-      if (!event1.target.contains(event2.target)) {
-        instance.listVisible = false;
+        this.listVisible = false;
       }
     },
   },
