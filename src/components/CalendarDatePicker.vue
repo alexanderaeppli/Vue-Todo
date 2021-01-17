@@ -29,6 +29,7 @@
           class="calendar__date"
           :class="{
             'calendar__date--today': today.valueOf() === day.valueOf(),
+            'calendar__date--selected': today.valueOf() === selectedDay.valueOf(),
           }"
           v-for="day in month"
           :key="day.valueOf()"
@@ -38,7 +39,8 @@
       </div>
     </div>
     <div class="datepicker__footer">
-      <button class="datepicker__button--primary">Done</button>
+      <button class="datepicker__button--secondary">Cancel</button>
+      <button class="datepicker__button">Done</button>
     </div>
   </div>
 </template>
@@ -64,7 +66,7 @@ export default {
       dayStrings: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
       startingYear: 2010,
       numberOfYears: 20,
-      selectedDay: 1,
+      selectedDay: '',
       selectedMonth: 1,
       selectedYear: 2021,
     };
@@ -106,22 +108,89 @@ export default {
 </script>
 
 <style lang="scss">
+@use 'sass:color';
+
+$color_primary: #9862fc;
+$color_primary--shading: color.scale($color_primary, $lightness: 20%);
+$color_grey: #5e5e5e;
+$color_grey--shading: color.scale($color_grey, $lightness: 20%);
+
 .datepicker {
-  background-color: rgb(28, 8, 46);
+  background-color: #3e3b41;
   max-width: 300px;
-  font-family: 'Source Sans', sans-serif;
-  border-radius: 10px;
+  font-family: 'Rubik', sans-serif;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 
   &__header,
   &__footer {
     padding: 15px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__button {
+    padding: 8px 20px 10px;
+    margin-top: 2px;
+    border-radius: 5px;
+    border: none;
+    position: relative;
+    background-color: $color_primary--shading;
+    z-index: 1;
+    color: white;
+    box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, 0.75);
+    margin-left: 20px;
+    font-weight: 600;
+    width: 100%;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 2px;
+      left: 0;
+      border-radius: 5px;
+      z-index: -1;
+      background-color: $color_primary;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: color.scale($color_primary--shading, $lightness: 20%);
+
+      &::after {
+        background-color: color.scale($color_primary, $lightness: 20%);
+      }
+    }
+
+    &--secondary {
+      @extend .datepicker__button;
+      margin-left: unset;
+      background-color: $color_grey--shading;
+
+      &::after {
+        background-color: $color_grey;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: color.scale($color_grey--shading, $lightness: 20%);
+
+        &::after {
+          background-color: color.scale($color_grey, $lightness: 20%);
+        }
+      }
+    }
   }
 }
 
 .calendar {
   margin: 0 15px;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.25);
 
   &__inner {
     display: grid;
@@ -140,9 +209,19 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+    border-radius: 10px;
 
     &--today {
-      border: black 2px solid;
+      border: $color_grey 3px solid;
+    }
+
+    &--selected {
+      border: $color_primary 3px solid;
+    }
+
+    &--title {
+      font-weight: 400;
     }
   }
 }
