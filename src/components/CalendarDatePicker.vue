@@ -1,20 +1,8 @@
 <template>
   <div class="datepicker">
     <div class="datepicker__header">
-      <select name="month" id="" v-model="selectedMonth">
-        <option v-for="(month, index) in months" :key="month" :value="index">
-          {{ month }}
-        </option>
-      </select>
-      <select name="year" id="" v-model="selectedYear">
-        <option
-          v-for="i in numberOfYears"
-          :key="i"
-          :value="startingYear + (i - 1)"
-        >
-          {{ startingYear + (i - 1) }}
-        </option>
-      </select>
+      <dropdown :items="months" :selectedItemIndex="selectedMonth" ></dropdown>
+      <dropdown :items="years" :selectedItemIndex="selectedYear"></dropdown>
     </div>
     <div class="calendar">
       <div class="calendar__inner">
@@ -29,9 +17,11 @@
           class="calendar__date"
           :class="{
             'calendar__date--today': today.valueOf() === day.valueOf(),
-            'calendar__date--selected': today.valueOf() === selectedDay.valueOf(),
+            'calendar__date--selected':
+              today.valueOf() === selectedDay.valueOf(),
           }"
-          v-for="day in month"
+          @click="selectedDay = day"
+          v-for="day in daysOfMonth"
           :key="day.valueOf()"
         >
           <span>{{ day.getDate() }}</span>
@@ -46,7 +36,10 @@
 </template>
 
 <script>
+import Dropdown from './Dropdown';
+
 export default {
+  components: { Dropdown },
   data() {
     return {
       months: [
@@ -72,7 +65,6 @@ export default {
     };
   },
   methods: {
-    markToday() {},
     clearTime(date) {
       date.setHours(0);
       date.setMinutes(0);
@@ -81,7 +73,7 @@ export default {
     },
   },
   computed: {
-    month() {
+    daysOfMonth() {
       let days = [];
       let startDate = new Date(this.selectedYear, this.selectedMonth, 1); // Get the first day of the selected month
       let offsetArray = [6, 0, 1, 2, 3, 4, 5]; // Array with offset values for every day (Mo -> So)
@@ -103,20 +95,27 @@ export default {
       this.clearTime(today);
       return today;
     },
+    years() {
+      let years = [];
+      for(let i = 0; i < this.numberOfYears; i++) {
+        years[i] = this.startingYear + ( i - 1);
+      }
+      return years;
+    },
   },
+  mounted() {
+    this.selectedMonth = this.today.getMonth();
+    this.selectedYear = this.today.getYear();
+  }
 };
 </script>
 
 <style lang="scss">
 @use 'sass:color';
-
-$color_primary: #9862fc;
-$color_primary--shading: color.scale($color_primary, $lightness: 20%);
-$color_grey: #5e5e5e;
-$color_grey--shading: color.scale($color_grey, $lightness: 20%);
+@use '../variables.scss' as var;
 
 .datepicker {
-  background-color: #3e3b41;
+  background-color: var.$color_background;
   max-width: 300px;
   font-family: 'Rubik', sans-serif;
   border-radius: 5px;
@@ -138,7 +137,7 @@ $color_grey--shading: color.scale($color_grey, $lightness: 20%);
     border-radius: 5px;
     border: none;
     position: relative;
-    background-color: $color_primary--shading;
+    background-color: var.$color_primary--shading;
     z-index: 1;
     color: white;
     box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, 0.75);
@@ -146,7 +145,7 @@ $color_grey--shading: color.scale($color_grey, $lightness: 20%);
     font-weight: 600;
     width: 100%;
 
-    &::after {
+    &::before {
       content: '';
       position: absolute;
       width: 100%;
@@ -155,33 +154,39 @@ $color_grey--shading: color.scale($color_grey, $lightness: 20%);
       left: 0;
       border-radius: 5px;
       z-index: -1;
-      background-color: $color_primary;
+      background-color: var.$color_primary;
     }
 
     &:hover,
     &:focus {
-      background-color: color.scale($color_primary--shading, $lightness: 20%);
+      background-color: color.scale(
+        var.$color_primary--shading,
+        $lightness: 20%
+      );
 
-      &::after {
-        background-color: color.scale($color_primary, $lightness: 20%);
+      &::before {
+        background-color: color.scale(var.$color_primary, $lightness: 20%);
       }
     }
 
     &--secondary {
       @extend .datepicker__button;
       margin-left: unset;
-      background-color: $color_grey--shading;
+      background-color: var.$color_grey--shading;
 
       &::after {
-        background-color: $color_grey;
+        background-color: var.$color_grey;
       }
 
       &:hover,
       &:focus {
-        background-color: color.scale($color_grey--shading, $lightness: 20%);
+        background-color: color.scale(
+          var.$color_grey--shading,
+          $lightness: 20%
+        );
 
         &::after {
-          background-color: color.scale($color_grey, $lightness: 20%);
+          background-color: color.scale(var.$color_grey, $lightness: 20%);
         }
       }
     }
@@ -189,8 +194,9 @@ $color_grey--shading: color.scale($color_grey, $lightness: 20%);
 }
 
 .calendar {
-  margin: 0 15px;
-  border-radius: 10px;
+  padding: 0 15px;
+  //background-color: color.scale(var.$color_background, $lightness: 10%);
+  //box-shadow: 0px 4px 4px -4px rgba(50, 50, 50, 0.75);
 
   &__inner {
     display: grid;
@@ -213,11 +219,11 @@ $color_grey--shading: color.scale($color_grey, $lightness: 20%);
     border-radius: 10px;
 
     &--today {
-      border: $color_grey 3px solid;
+      border: var.$color_grey 3px solid;
     }
 
     &--selected {
-      border: $color_primary 3px solid;
+      border: var.$color_primary 3px solid;
     }
 
     &--title {
