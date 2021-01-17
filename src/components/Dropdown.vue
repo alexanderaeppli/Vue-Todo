@@ -30,24 +30,22 @@ export default {
   methods: {
     toggleDropdown(event1) {
       let toggleDropdown = true;
-      console.log(this.listVisible);
-      
+
+      function eventListener() {}
+
       if (!this.listVisible) {
-        window.addEventListener('click', function(event2) {
-          if (!event1.target.contains(event2.target)) {
-            toggleDropdown = false;
-            console.log(this.listVisible);
-          }
-        });
+        window.addEventListener('click', this.eventListener(event));
       } else {
-        window.removeEventListener('click');
+        window.removeEventListener('click', this.eventListener(event));
       }
       console.log(toggleDropdown);
       this.listVisible = toggleDropdown;
     },
-    setListVisability() {
-      this.listVisible = false;
-    }
+    eventListenerFunction() {
+      if (!event1.target.contains(event2.target)) {
+        instance.listVisible = false;
+      }
+    },
   },
 };
 </script>
