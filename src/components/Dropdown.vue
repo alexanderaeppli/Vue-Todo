@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown" @click="toggleDropdown">
+  <div class="dropdown" @click="toggleDropdown" ref="dropdown">
     <span class="dropdown__selected">{{ items[selectedItemIndex] }}</span>
     <div v-show="listVisible" class="dropdown__list" name="index" id="">
       <span
@@ -28,21 +28,29 @@ export default {
     };
   },
   methods: {
-    toggleDropdown(event1) {
-      let component = this;
+    toggleDropdown() {
+      const self = this;
+      
+      function eventListenerFunction(event) {
+        if (!self.$refs['dropdown'].contains(event.target)) {
+          self.listVisible = false;
+          console.log('click');
+          document.removeEventListener('click', eventListenerFunction, false);
+        }
+      }
 
       if (!this.listVisible) {
         this.listVisible = true;
-
-        document.addEventListener('click', function eventListenerFunction(event) {
-          if (!event1.target.contains(event.target)) {
-            component.listVisible = false;
-            //document.removeEventListener('click', eventListenerFunction());
-            console.log('click');
-          }
-        }, false);
+        document.addEventListener('click', eventListenerFunction, false);
       } else {
         this.listVisible = false;
+      }
+    },
+  },
+  watch: {
+    listVisible() {
+      if (!this.listVisible) {
+        console.log('watcher');
       }
     },
   },
