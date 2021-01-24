@@ -4,7 +4,7 @@
       <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
       <dropdown
         :items="years"
-        :selectedItemIndex="this.years.indexOf(this.selectedYear)"
+        :selectedItemIndex="years.indexOf(selectedYear)"
         @select="setYear"
       ></dropdown>
     </div>
@@ -59,7 +59,7 @@ export default {
       startingYear: 2010,
       numberOfYears: 20,
       selectedDay: '',
-      selectedMonth: 1,
+      selectedMonth: ,
       selectedYear: 2021,
     };
   },
@@ -111,6 +111,7 @@ export default {
   mounted() {
     // Set current Month / Year
     this.selectedMonth = this.today.getMonth();
+    console.log(this.selectedMonth);
     this.selectedYear = this.today.getFullYear();
   },
 };

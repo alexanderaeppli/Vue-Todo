@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown" @click="toggleDropdown" ref="dropdown">
     <span class="dropdown__selected">{{ items[selectedItemIndex] }}</span>
-    <div v-show="listVisible" class="dropdown__list" ref="dropdown-list">
+    <div v-show="listVisible" :class="{'dropdown--opague': opague}" class="dropdown__list" ref="dropdown-list">
       <div class="dropdown__list-inner" ref="dropdown-list-inner">
         <span
           class="dropdown__item"
@@ -27,7 +27,8 @@ export default {
   emits: ['select'],
   data() {
     return {
-      listVisible: false,
+      listVisible: true,
+      opague: true
     };
   },
   methods: {
@@ -55,13 +56,18 @@ export default {
       this.$emit('select', index);
       this.scrollList(index);
     },
-    scrollList(index = this.selectedItemIndex) {
+    scrollList(index) {
       console.log(index);
       let list = this.$refs['dropdown-list'];
       let item = this.$refs['dropdown-item-' + index];
-      list.scroll(0, item.offsetTop + item.offsetHeight / 2 - list.offsetHeight / 2 + 1);
+      list.scroll(0, item.offsetTop + item.offsetHeight / 2 - list.offsetHeight / 2);
     },
   },
+  mounted() {
+    this.scrollList(this.selectedItemIndex);
+    this.listVisible = false;
+    this.opague = false;
+  }
 };
 </script>
 
@@ -71,9 +77,12 @@ export default {
 .dropdown {
   position: relative;
   cursor: pointer;
-  padding: 5px 15px;
   color: white;
   user-select: none;
+
+  &--opague {
+    opacity: 0;
+  }
 
   &__list {
     position: absolute;
@@ -96,11 +105,20 @@ export default {
   &__list-inner {
     display: flex;
     flex-direction: column;
-    padding: 75px 0;
+    padding: 60px 0;
   }
 
   &__item {
     padding: 5px 15px;
+    height: 30px;
   }
+
+  &__selected {
+    padding: 5px 15px;
+    height: 30px;
+    display: block;
+  }
+
+  
 }
 </style>
