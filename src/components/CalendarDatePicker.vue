@@ -2,23 +2,22 @@
   <div class="datepicker">
     <div class="datepicker__header">
       <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
-      <dropdown :items="years" :selectedItemIndex="this.years.indexOf(this.selectedYear)"></dropdown>
+      <dropdown
+        :items="years"
+        :selectedItemIndex="this.years.indexOf(this.selectedYear)"
+        @select="setYear"
+      ></dropdown>
     </div>
     <div class="calendar">
       <div class="calendar__inner">
-        <div
-          class="calendar__date--title"
-          v-for="(dayString, index) in dayStrings"
-          :key="index"
-        >
+        <div class="calendar__date--title" v-for="(dayString, index) in dayStrings" :key="index">
           <span>{{ dayString }}</span>
         </div>
         <div
           class="calendar__date"
           :class="{
             'calendar__date--today': today.valueOf() === day.valueOf(),
-            'calendar__date--selected':
-              today.valueOf() === selectedDay.valueOf(),
+            'calendar__date--selected': today.valueOf() === selectedDay.valueOf(),
           }"
           @click="selectedDay = day"
           v-for="day in daysOfMonth"
@@ -29,8 +28,8 @@
       </div>
     </div>
     <div class="datepicker__footer">
-      <button class="datepicker__button--secondary">Cancel</button>
-      <button class="datepicker__button">Done</button>
+      <button class="button--secondary">Cancel</button>
+      <button class="button">Done</button>
     </div>
   </div>
 </template>
@@ -73,7 +72,10 @@ export default {
     },
     setMonth(index) {
       this.selectedMonth = index;
-    }
+    },
+    setYear(index) {
+      this.selectedYear = this.years[index];
+    },
   },
   computed: {
     daysOfMonth() {
@@ -107,6 +109,7 @@ export default {
     },
   },
   mounted() {
+    // Set current Month / Year
     this.selectedMonth = this.today.getMonth();
     this.selectedYear = this.today.getFullYear();
   },
@@ -137,64 +140,58 @@ export default {
     display: flex;
     justify-content: center;
   }
+}
 
-  &__button {
-    padding: 8px 20px 10px;
-    margin-top: 2px;
-    border-radius: 5px;
-    border: none;
-    position: relative;
-    background-color: var.$color_primary--shading;
-    z-index: 1;
-    color: white;
-    box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, 0.75);
-    margin-left: 20px;
-    font-weight: 600;
+.button {
+  padding: 8px 20px 10px;
+  margin-top: 2px;
+  border-radius: 5px;
+  border: none;
+  position: relative;
+  background-color: var.$color_primary--shading;
+  z-index: 1;
+  color: white;
+  box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, 0.75);
+  margin-left: 20px;
+  font-weight: 600;
+  width: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
     width: 100%;
+    height: 100%;
+    top: 2px;
+    left: 0;
+    border-radius: 5px;
+    z-index: -1;
+    background-color: var.$color_primary;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color.scale(var.$color_primary--shading, $lightness: 20%);
 
     &::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 2px;
-      left: 0;
-      border-radius: 5px;
-      z-index: -1;
-      background-color: var.$color_primary;
+      background-color: color.scale(var.$color_primary, $lightness: 20%);
+    }
+  }
+
+  &--secondary {
+    @extend .button;
+    margin-left: unset;
+    background-color: var.$color_grey--shading;
+
+    &::after {
+      background-color: var.$color_grey;
     }
 
     &:hover,
     &:focus {
-      background-color: color.scale(
-        var.$color_primary--shading,
-        $lightness: 20%
-      );
+      background-color: color.scale(var.$color_grey--shading, $lightness: 20%);
 
       &::after {
-        background-color: color.scale(var.$color_primary, $lightness: 20%);
-      }
-    }
-
-    &--secondary {
-      @extend .datepicker__button;
-      margin-left: unset;
-      background-color: var.$color_grey--shading;
-
-      &::after {
-        background-color: var.$color_grey;
-      }
-
-      &:hover,
-      &:focus {
-        background-color: color.scale(
-          var.$color_grey--shading,
-          $lightness: 20%
-        );
-
-        &::after {
-          background-color: color.scale(var.$color_grey, $lightness: 20%);
-        }
+        background-color: color.scale(var.$color_grey, $lightness: 20%);
       }
     }
   }
