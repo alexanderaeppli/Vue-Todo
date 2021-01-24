@@ -16,10 +16,11 @@
         <div
           class="calendar__date"
           :class="{
-            'calendar__date--today': today.valueOf() === day.valueOf(),
-            'calendar__date--selected': today.valueOf() === selectedDay.valueOf(),
+            'calendar__date--selected': day.valueOf() === selectedDay.valueOf(),
+            'calendar__date--today': day.valueOf() === today.valueOf(),
+            'calendar__date--otherMonth': day.getMonth() !== selectedMonth,
           }"
-          @click="selectedDay = day"
+          @click="selectDay(day); setDate(day)"
           v-for="day in daysOfMonth"
           :key="day.valueOf()"
         >
@@ -29,7 +30,7 @@
     </div>
     <div class="datepicker__footer">
       <button class="button--secondary">Cancel</button>
-      <button class="button">Done</button>
+      <button @click.prevent="submit" class="button">Done</button>
     </div>
   </div>
 </template>
@@ -59,7 +60,7 @@ export default {
       startingYear: 2010,
       numberOfYears: 20,
       selectedDay: '',
-      selectedMonth: ,
+      selectedMonth: 0,
       selectedYear: 2021,
     };
   },
@@ -76,6 +77,16 @@ export default {
     setYear(index) {
       this.selectedYear = this.years[index];
     },
+    setDate(day) {
+      this.selectedMonth = day.getMonth();
+      this.selectedYear = day.getFullYear();
+    },
+    selectDay(day){
+      this.selectedDay = day;
+    },
+    submit() {
+      alert('The Picked date is ' + this.selectedDay.toLocaleDateString());
+    }
   },
   computed: {
     daysOfMonth() {
@@ -89,7 +100,6 @@ export default {
       for (let i = 0; i < 35; i++) {
         let newStartDate = new Date(startDateString);
         let date = new Date(newStartDate.setDate(newStartDate.getDate() + i));
-        //this.clearTime(date);
         days[i] = date;
       }
 
@@ -110,9 +120,7 @@ export default {
   },
   mounted() {
     // Set current Month / Year
-    this.selectedMonth = this.today.getMonth();
-    console.log(this.selectedMonth);
-    this.selectedYear = this.today.getFullYear();
+    this.setDate(this.today);
   },
 };
 </script>
@@ -220,7 +228,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
+    font-weight: 400;
     border-radius: 10px;
 
     &--today {
@@ -231,8 +239,13 @@ export default {
       border: var.$color_primary 3px solid;
     }
 
+    &--otherMonth {
+      color: #969696;
+    }
+
     &--title {
-      font-weight: 400;
+      font-weight: 600;
+      color: #ffffff;
     }
   }
 }
