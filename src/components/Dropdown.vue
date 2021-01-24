@@ -27,7 +27,6 @@ export default {
   emits: ['select'],
   data() {
     return {
-      listVisible: true,
       opague: true
     };
   },
@@ -56,15 +55,14 @@ export default {
       this.$emit('select', index);
       this.scrollList(index);
     },
-    scrollList(index) {
-      console.log(index);
+    scrollList(index = this.selectedItemIndex) {
       let list = this.$refs['dropdown-list'];
       let item = this.$refs['dropdown-item-' + index];
       list.scroll(0, item.offsetTop + item.offsetHeight / 2 - list.offsetHeight / 2);
     },
   },
   mounted() {
-    this.scrollList(this.selectedItemIndex);
+    this.scrollList();
     this.listVisible = false;
     this.opague = false;
   }

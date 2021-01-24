@@ -1,38 +1,41 @@
 <template>
-  <div class="datepicker">
-    <div class="datepicker__header">
-      <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
-      <dropdown
-        :items="years"
-        :selectedItemIndex="years.indexOf(selectedYear)"
-        @select="setYear"
-      ></dropdown>
-    </div>
-    <div class="calendar">
-      <div class="calendar__inner">
-        <div class="calendar__date--title" v-for="(dayString, index) in dayStrings" :key="index">
-          <span>{{ dayString }}</span>
-        </div>
-        <div
-          class="calendar__date"
-          :class="{
-            'calendar__date--selected': day.valueOf() === selectedDay.valueOf(),
-            'calendar__date--today': day.valueOf() === today.valueOf(),
-            'calendar__date--otherMonth': day.getMonth() !== selectedMonth,
-          }"
-          @click="selectDay(day); setDate(day)"
-          v-for="day in daysOfMonth"
-          :key="day.valueOf()"
-        >
-          <span>{{ day.getDate() }}</span>
+    <div class="datepicker" v-if="datepickerVisible">
+      <div class="datepicker__header">
+        <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
+        <dropdown
+          :items="years"
+          :selectedItemIndex="years.indexOf(selectedYear)"
+          @select="setYear"
+        ></dropdown>
+      </div>
+      <div class="calendar">
+        <div class="calendar__inner">
+          <div class="calendar__date--title" v-for="(dayString, index) in dayStrings" :key="index">
+            <span>{{ dayString }}</span>
+          </div>
+          <div
+            class="calendar__date"
+            :class="{
+              'calendar__date--selected': day.valueOf() === selectedDay.valueOf(),
+              'calendar__date--today': day.valueOf() === today.valueOf(),
+              'calendar__date--otherMonth': day.getMonth() !== selectedMonth,
+            }"
+            @click="
+              selectDay(day);
+              setDate(day);
+            "
+            v-for="day in daysOfMonth"
+            :key="day.valueOf()"
+          >
+            <span>{{ day.getDate() }}</span>
+          </div>
         </div>
       </div>
+      <div class="datepicker__footer">
+        <button class="button--secondary">Cancel</button>
+        <button @click.prevent="submit" class="button">Done</button>
+      </div>
     </div>
-    <div class="datepicker__footer">
-      <button class="button--secondary">Cancel</button>
-      <button @click.prevent="submit" class="button">Done</button>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -62,6 +65,8 @@ export default {
       selectedDay: '',
       selectedMonth: 0,
       selectedYear: 2021,
+      datepickerVisible: false,
+      listVisible: true,
     };
   },
   methods: {
@@ -81,12 +86,12 @@ export default {
       this.selectedMonth = day.getMonth();
       this.selectedYear = day.getFullYear();
     },
-    selectDay(day){
+    selectDay(day) {
       this.selectedDay = day;
     },
     submit() {
       alert('The Picked date is ' + this.selectedDay.toLocaleDateString());
-    }
+    },
   },
   computed: {
     daysOfMonth() {
@@ -207,6 +212,8 @@ export default {
 }
 
 .calendar {
+  position: absolute;
+  top: 100%;
   padding: 0 15px;
   //background-color: color.scale(var.$color_background, $lightness: 10%);
   //box-shadow: 0px 4px 4px -4px rgba(50, 50, 50, 0.75);

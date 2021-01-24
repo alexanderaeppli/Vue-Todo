@@ -1,13 +1,10 @@
 <template>
   <form @submit.prevent="sendTodo(newTodoField)" class="todo-form">
-    <input
-      class="todo-form__field"
-      type="text"
-      name=""
-      v-model="newTodoField"
-      id=""
-    />
-    <calendar-date-picker></calendar-date-picker>
+    <input class="todo-form__field" type="text" name="" v-model="newTodoField" id="" />
+    <div class="todo-form__date" @click="datepickerVisible = !datepickerVisible">
+      {{ selectedDay }}
+      <calendar-date-picker></calendar-date-picker>
+    </div>
   </form>
 </template>
 
@@ -19,7 +16,9 @@ export default {
   data() {
     return {
       newTodoField: '',
+      newTodoDate: '',
       todoKey: 0,
+      listVisible: true,
     };
   },
   emits: ['todoSent'],
@@ -55,6 +54,12 @@ export default {
     border-radius: 5px;
     border: 1px rgb(206, 206, 206) solid;
     padding: 10px 15px;
+  }
+
+  &__date {
+    height: 20px;
+    background-color: grey;
+    position: relative;
   }
 }
 </style>
