@@ -1,7 +1,12 @@
 <template>
   <div class="dropdown" @click="toggleDropdown" ref="dropdown">
     <span class="dropdown__selected">{{ items[selectedItemIndex] }}</span>
-    <div v-show="listVisible" :class="{'dropdown--opague': opague}" class="dropdown__list" ref="dropdown-list">
+    <div
+      v-show="listVisible"
+      :class="{ 'dropdown--opague': opague }"
+      class="dropdown__list"
+      ref="dropdown-list"
+    >
       <div class="dropdown__list-inner" ref="dropdown-list-inner">
         <span
           class="dropdown__item"
@@ -27,16 +32,23 @@ export default {
   emits: ['select'],
   data() {
     return {
-      opague: true
+      opague: true,
+      listVisible: true,
     };
   },
   methods: {
     toggleDropdown() {
       const self = this;
-      
+
       function eventListener(event) {
-        if (!self.$refs['dropdown'].contains(event.target)) {
-          self.listVisible = false;
+        if (self.$refs['dropdown'] !== null) {
+          
+          if (!self.$refs['dropdown'].contains(event.target)) {
+            self.listVisible = false;
+            document.removeEventListener('click', eventListener, false);
+          }
+
+        } else {
           document.removeEventListener('click', eventListener, false);
         }
       }
@@ -65,7 +77,7 @@ export default {
     this.scrollList();
     this.listVisible = false;
     this.opague = false;
-  }
+  },
 };
 </script>
 

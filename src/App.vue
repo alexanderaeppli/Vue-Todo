@@ -1,6 +1,6 @@
 <template>
   <todo-form @todo-sent="addTodo"></todo-form>
-  <transition-group tag="ul" name="list" class="todo-list">
+  <transition-group v-if="todos.length > 0" tag="ul" name="list" class="todo-list">
     <todo-item
       v-for="(todo, index) in todos"
       :todo="todo"
@@ -8,7 +8,6 @@
       @remove-todo="removeTodo(index)"
     ></todo-item>
   </transition-group>
-  <button @click="shuffle">Shuffle</button>
 </template>
 
 <script>
@@ -32,16 +31,18 @@ export default {
         this.todos.splice(index, 1);
       }
     },
-  },
-  computed: {
-    draggedItem() {
-      return this.todos.find((todo) => todo.isdragged === true);
-    },
-  },
+  }
 };
 </script>
 
 <style lang="scss">
+@use 'sass:color';
+@use './variables.scss' as var;
+
+body {
+  font-family: 'Rubik', sans-serif;
+}
+
 *,
 ::after,
 ::before {
@@ -52,13 +53,20 @@ export default {
   width: 100%;
   max-width: 600px;
   margin: 60px auto 0;
+  background-color: var.$color_background;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.50);
 }
 
 .todo-list {
   list-style: none;
-  padding: unset;
   display: flex;
   flex-direction: column;
+  background-color: var.$color_background;
+  margin: 0;
+  padding: 0;
+  margin-top: 40px;
 }
 
 .list-enter-active,

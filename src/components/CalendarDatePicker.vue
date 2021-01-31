@@ -1,5 +1,7 @@
 <template>
-    <div class="datepicker" v-if="datepickerVisible">
+  <div class="datepicker" @click.self="toggleDatepicker">
+    <span @click="toggleDatepicker">{{ label }}</span>
+    <div v-if="datepickerVisible" class="datepicker__picker">
       <div class="datepicker__header">
         <dropdown :items="months" :selectedItemIndex="selectedMonth" @select="setMonth"></dropdown>
         <dropdown
@@ -23,6 +25,7 @@
             @click="
               selectDay(day);
               setDate(day);
+              toggleDatepicker();
             "
             v-for="day in daysOfMonth"
             :key="day.valueOf()"
@@ -32,10 +35,11 @@
         </div>
       </div>
       <div class="datepicker__footer">
-        <button class="button--secondary">Cancel</button>
-        <button @click.prevent="submit" class="button">Done</button>
+        <button @click.prevent="clearDate" class="button--secondary">Cancel</button>
+        <button @click.prevent="toggleDatepicker" class="button">Done</button>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -43,6 +47,11 @@ import Dropdown from './Dropdown';
 
 export default {
   components: { Dropdown },
+  emits: ['pickDate', 'clearDate'],
+  props: {
+    date: Object,
+    String,
+  },
   data() {
     return {
       months: [
@@ -88,9 +97,14 @@ export default {
     },
     selectDay(day) {
       this.selectedDay = day;
+      this.$emit('pickDate', this.selectedDay);
     },
-    submit() {
-      alert('The Picked date is ' + this.selectedDay.toLocaleDateString());
+    toggleDatepicker() {
+      this.datepickerVisible = !this.datepickerVisible;
+    },
+    clearDate() {
+      this.$emit('clearDate');
+      this.toggleDatepicker();
     },
   },
   computed: {
@@ -122,6 +136,20 @@ export default {
       }
       return years;
     },
+    label() {
+      if (this.date === null) {
+        return 'Date';
+      } else {
+        return this.date.toLocaleDateString();
+      }
+    },
+  },
+  watch: {
+    date() {
+      if (this.date === null) {
+        this.selectedDay = '';
+      }
+    }
   },
   mounted() {
     // Set current Month / Year
@@ -135,11 +163,18 @@ export default {
 @use '../variables.scss' as var;
 
 .datepicker {
-  background-color: var.$color_background;
-  max-width: 300px;
-  font-family: 'Rubik', sans-serif;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  position: relative;
+
+  &__picker {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 5;
+    background-color: var.$color_background;
+    max-width: 300px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+  }
 
   &__header,
   &__footer {
@@ -162,6 +197,7 @@ export default {
   border-radius: 5px;
   border: none;
   position: relative;
+  top: -2px;
   background-color: var.$color_primary--shading;
   z-index: 1;
   color: white;
@@ -169,6 +205,7 @@ export default {
   margin-left: 20px;
   font-weight: 600;
   width: 100%;
+  white-space: nowrap;
 
   &::after {
     content: '';
@@ -212,11 +249,8 @@ export default {
 }
 
 .calendar {
-  position: absolute;
   top: 100%;
   padding: 0 15px;
-  //background-color: color.scale(var.$color_background, $lightness: 10%);
-  //box-shadow: 0px 4px 4px -4px rgba(50, 50, 50, 0.75);
 
   &__inner {
     display: grid;
@@ -235,7 +269,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 400;
     border-radius: 10px;
 
     &--today {

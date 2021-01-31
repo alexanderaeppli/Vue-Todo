@@ -1,58 +1,62 @@
 <template>
-      <li class="todo-item" :class="{ dragged: todo.isdragged }" >
-        {{ todo.content }}
-        <button @click="$emit('removeTodo')">Remove</button>
-      </li>
+  <li class="todo-item" :class="{ dragged: todo.isdragged }">
+    {{ todo.content }}
+    <div class="todo-item__attr">
+      <span class="todo-item__date" v-if="todo.date">{{ todo.date.toLocaleDateString() }}</span>
+      <button class="button button--secondary" @click="$emit('removeTodo')">Remove</button>
+    </div>
+  </li>
 </template>
 
 <script>
 export default {
   props: {
-    todo: Object
+    todo: Object,
   },
   emits: ['removeTodo'],
-  methods: {
-
-  }
+  methods: {},
 };
 </script>
 
 <style lang="scss">
+@use 'sass:color';
+@use '../variables.scss' as var;
+
 .todo-item {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 10px 15px;
+  padding: 10px 0;
   flex-grow: 0;
   position: relative;
+  color: white;
+  border-top: 2px solid color.scale(var.$color_background, $lightness: -20%);
+  border-bottom: 2px solid transparent;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
+
+  &:first-of-type {
+    border-top: none;
+  }
+
+  &__attr {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 500px) {
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
+  &__date {
+    margin-right: 10px;
+  }
+
+  .button {
+    width: auto;
+  }
 }
-
-// .dragged {
-//   opacity: 0.3;
-// }
-
-// .unselectable {
-//   -webkit-user-select: none;
-//   -webkit-touch-callout: none;
-//   -moz-user-select: none;
-//   -ms-user-select: none;
-//   user-select: none;
-// }
-
-// .drop-zone-top,
-// .drop-zone-bottom {
-//   position: absolute;
-//   height: 50%;
-//   width: 100%;
-//   left: 0;
-// }
-
-
-// .drop-zone-top {
-//   top: 0;
-// }
-
-// .drop-zone-bottom {
-//   bottom: 0;
-// }
 </style>
