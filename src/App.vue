@@ -31,7 +31,7 @@ export default {
         this.todos.splice(index, 1);
       }
     },
-  }
+  },
 };
 </script>
 
@@ -56,7 +56,11 @@ body {
   background-color: var.$color_background;
   border-radius: 5px;
   padding: 15px;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.50);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 500px) {
+    margin-top: 10px;
+  }
 }
 
 .todo-list {

@@ -1,6 +1,6 @@
 <template>
   <li class="todo-item" :class="{ dragged: todo.isdragged }">
-    {{ todo.content }}
+    <span class="todo-item__title">{{ todo.content }}</span>
     <div class="todo-item__attr">
       <span class="todo-item__date" v-if="todo.date">{{ todo.date.toLocaleDateString() }}</span>
       <button class="button button--secondary" @click="$emit('removeTodo')">Remove</button>
@@ -39,6 +39,12 @@ export default {
 
   &:first-of-type {
     border-top: none;
+  }
+
+  &__title {
+    @media (max-width: 500px) {
+      margin-bottom: 15px;
+    }
   }
 
   &__attr {
